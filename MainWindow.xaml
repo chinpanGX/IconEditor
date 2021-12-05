@@ -5,8 +5,107 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IconEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title = "Deai`s Special IconEditor" Height = "800" Width = "1600" WindowStartupLocation = "CenterScreen" WindowState="Maximized">
+    <Grid Background = "#FF4F3131">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height=" Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         
+        <!--メニューの設定-->
+        <Menu Grid.Row = "0" Height = "Auto">
+          
+            <!--ファイルメニュー-->
+            <MenuItem Header = "ファイル(_F)" Click="MenuItem_File_Click">
+                <MenuItem x:Name ="MenuItem_New" Header = "新規作成(_N)..." InputGestureText = "Ctrl+N">
+                    <MenuItem.Icon>
+                        <Image Source="Images/NewFile_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name ="MenuItem_Open" Header = "開く(_O)..." InputGestureText = "Ctrl+O">　
+                    <MenuItem.Icon>
+                        <Image Source="Images/OpenFile_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name ="MenuItem_Keep" Header =  "上書き保存(_S)" InputGestureText = "Ctrl+S">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Save_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name ="MenuItem_SaveAs" Header =  "名前を付けて保存(_A)..." InputGestureText = "Ctrl+Shift+N">
+                    <MenuItem.Icon>
+                        <Image Source="Images/SaveAs_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem x:Name ="MenuItem_Exit" Header =  "終了(_X)" InputGestureText = "Alt+F4" Click="MenuItem_Exit_Click">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Exit_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            
+            <!--編集メニュー-->
+            <MenuItem Header = "編集(_E)">
+                <MenuItem x:Name = "MenuItem_Undo" Header = "元に戻す(_U)" InputGestureText = "Ctrl+U">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Undo_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name = "MenuItem_Redo" Header = "やり直し(_R)" InputGestureText = "Ctrl+R">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Redo_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!--ヘルプメニュー-->
+            <MenuItem Header = "ヘルプ(_H)">
+                <MenuItem x:Name = "MenuItem_Help" Header = "ヘルプ" InputGestureText = "F1">
+                </MenuItem>
+                <MenuItem x:Name = "MenuItem_Ver" Header = "バージョン情報(A)" Click="MenuItem_Ver_Click">
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
+
+        <!--ツールバー-->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0" Background =" #FFF0F0F0">
+            <Button x:Name ="ToolBar_NewFile" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
+                <Image Source="Images/NewFile_16x.png"/>
+            </Button>
+            <Button x:Name ="ToolBar_OpenFile" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
+                <Image Source="Images/OpenFile_16x.png"/>
+            </Button>
+            <Button x:Name ="ToolBar_Save" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
+                <Image Source="Images/Save_16x.png"/>
+            </Button>
+            <Button x:Name ="ToolBar_Undo" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
+                <Image Source="Images/Undo_16x.png"/>
+            </Button>
+            <Button x:Name ="ToolBar_Redo" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
+                <Image Source="Images/Redo_16x.png"/>
+            </Button>
+
+            <!--拡大縮小-->
+            <Label Name = "ZoomLabel" Content = "100%" Width ="40" HorizontalContentAlignment ="Right" VerticalContentAlignment="Center"/>
+            <Button Background="{x:Null}" BorderBrush="{x:Null}" Click="MemuItem_ZoomOut_Click">
+                <Image Source = "Images/ZoomOut_16x.png"/>
+            </Button>
+            <Slider x:Name="Slider_Zoom" VerticalAlignment="Center" Width="160" IsSnapToTickEnabled="True" Minimum="25" Maximum="400" Ticks="25, 50, 75, 100, 125, 150, 200, 300, 400" Value = "100"
+                    VerticalContentAlignment="Center" ValueChanged = "Slider_Zoom_ValueChaged"/>
+            <Button Background="{x:Null}" BorderBrush="{x:Null}" Click = "MenuItem_ZoonIn_Click">
+                <Image Source = "Images/ZoomIn_16x.png"/>
+            </Button>
+        </StackPanel>
+
+
+        <!--キャンパスの設定-->
+        <Canvas Grid.Row ="2" x:Name ="MainCanvas" Height="840" Width ="840" Initialized="MainCanvas_Initialized" Background = "#FF4F3131">
+            <Canvas.RenderTransform>
+                <MatrixTransform x:Name="matrixTransform"/>
+            </Canvas.RenderTransform>
+        </Canvas>
     </Grid>
 </Window>
