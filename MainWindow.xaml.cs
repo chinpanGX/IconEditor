@@ -71,7 +71,9 @@ namespace IconEditor
         private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Rectangle rect = (Rectangle)sender;
-            rect.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
+
+            SolidColorBrush paletteBrush = (SolidColorBrush)ColorPalette.Fill;
+            rect.Fill = new SolidColorBrush(paletteBrush.Color);
         }
 
         // ドラッグしている箇所を塗りつぶす
@@ -82,7 +84,8 @@ namespace IconEditor
             // 左ボタンを押し続ける
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                rect.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
+                SolidColorBrush paletteBrush = (SolidColorBrush)ColorPalette.Fill;
+                rect.Fill = new SolidColorBrush(paletteBrush.Color);
             }
         }
 
@@ -145,6 +148,24 @@ namespace IconEditor
             // Canvasのサイズを変更
             MainCanvas.Width = _windowSize * Slider_Zoom.Value * 0.01;
             MainCanvas.Height = _windowSize * Slider_Zoom.Value * 0.01;
+        }
+
+        // 色を選択する
+        private void ColorPalette_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+
+            cd.FullOpen = true;
+
+            SolidColorBrush paletteColorBrush = (SolidColorBrush)ColorPalette.Fill;
+            cd.Color = System.Drawing.Color.FromArgb(paletteColorBrush.Color.A, paletteColorBrush.Color.R, paletteColorBrush.Color.G, paletteColorBrush.Color.B);
+
+            if(cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Color color = Color.FromArgb(cd.Color.A, cd.Color.R, cd.Color.G, cd.Color.B);
+                ColorPalette.Fill = new SolidColorBrush(color);
+            }
+
         }
     }
 }
