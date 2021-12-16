@@ -7,43 +7,44 @@
         mc:Ignorable="d"
         Title = "Deai`s Special IconEditor" Height = "800" Width = "1600" WindowStartupLocation = "CenterScreen" WindowState="Maximized"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        ui:WindowHelper.UseModernWindowStyle="True">
+        ui:WindowHelper.UseModernWindowStyle = "True">
     <Grid Background = "#FF4F3131">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height=" Auto"/>
+            <RowDefinition Height = "Auto"/>
+            <RowDefinition Height = "Auto"/>
             <RowDefinition/>
+            <RowDefinition Height = "Auto"/>
         </Grid.RowDefinitions>
 
         <!--メニューの設定-->
-        <Menu Grid.Row = "0" Height = "Auto" Background="#FFF0F0F0" Foreground="#FFFF3434" OpacityMask="Black" Opacity="0.9">
+        <Menu Grid.Row = "0" Height = "Auto" Background = "#FFF0F0F0" Foreground = "#FFFF3434" OpacityMask = "Black" Opacity = "0.9">
 
             <!--ファイルメニュー-->
-            <MenuItem Header = "ファイル(_F)" Click="MenuItem_File_Click">
-                <MenuItem x:Name ="MenuItem_New" Header = "新規作成(_N)..." InputGestureText = "Ctrl+N">
+            <MenuItem Header = "ファイル(_F)" Click = "MenuItem_File_Click">
+                <MenuItem x:Name = "MenuItem_New" Header = "新規作成(_N)..." InputGestureText = "Ctrl+N">
                     <MenuItem.Icon>
-                        <Image Source="Images/NewFile_16x.png"/>
+                        <Image Source = "Images/NewFile_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name ="MenuItem_Open" Header = "開く(_O)..." InputGestureText = "Ctrl+O">　
+                <MenuItem x:Name = "MenuItem_Open" Header = "開く(_O)..." InputGestureText = "Ctrl+O">　
                     <MenuItem.Icon>
-                        <Image Source="Images/OpenFile_16x.png"/>
+                        <Image Source = "Images/OpenFile_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name ="MenuItem_Keep" Header =  "上書き保存(_S)" InputGestureText = "Ctrl+S">
+                <MenuItem x:Name = "MenuItem_Keep" Header = "上書き保存(_S)" InputGestureText = "Ctrl+S">
                     <MenuItem.Icon>
-                        <Image Source="Images/Save_16x.png"/>
+                        <Image Source = "Images/Save_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name ="MenuItem_SaveAs" Header =  "名前を付けて保存(_A)..." InputGestureText = "Ctrl+Shift+N">
+                <MenuItem x:Name = "MenuItem_SaveAs" Header = "名前を付けて保存(_A)..." InputGestureText = "Ctrl+Shift+N">
                     <MenuItem.Icon>
-                        <Image Source="Images/SaveAs_16x.png"/>
+                        <Image Source = "Images/SaveAs_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name ="MenuItem_Exit" Header =  "終了(_X)" InputGestureText = "Alt+F4" Click="MenuItem_Exit_Click">
+                <MenuItem x:Name = "MenuItem_Exit" Header = "終了(_X)" InputGestureText = "Alt+F4" Click="MenuItem_Exit_Click">
                     <MenuItem.Icon>
-                        <Image Source="Images/Exit_16x.png"/>
+                        <Image Source = "Images/Exit_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -73,31 +74,32 @@
         </Menu>
 
         <!--ツールバー-->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0" Background =" #FFF0F0F0">
-            <Button x:Name ="ToolBar_NewFile" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
-                <Image Source="Images/NewFile_16x.png"/>
+        <StackPanel Grid.Row = "1" Orientation = "Horizontal" Margin = "0" Background = "#FFF0F0F0">
+            <Button x:Name = "ToolBar_NewFile" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
+                <Image Source = "Images/NewFile_16x.png"/>
             </Button>
-            <Button x:Name ="ToolBar_OpenFile" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
-                <Image Source="Images/OpenFile_16x.png"/>
+            <Button x:Name = "ToolBar_OpenFile" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
+                <Image Source = "Images/OpenFile_16x.png"/>
             </Button>
-            <Button x:Name ="ToolBar_Save" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
-                <Image Source="Images/Save_16x.png"/>
+            <Button x:Name = "ToolBar_Save" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
+                <Image Source = "Images/Save_16x.png"/>
             </Button>
-            <Button x:Name ="ToolBar_Undo" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
+            <Button x:Name = "ToolBar_Undo" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
                 <Image Source="Images/Undo_16x.png"/>
             </Button>
-            <Button x:Name ="ToolBar_Redo" Padding="10" BorderBrush="{x:Null}" Background="{x:Null}">
-                <Image Source="Images/Redo_16x.png"/>
+            <Button x:Name = "ToolBar_Redo" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
+                <Image Source = "Images/Redo_16x.png"/>
             </Button>
 
-            <!--拡大縮小-->
-            <Label Name = "ZoomLabel" Content = "100%" Width ="40" HorizontalContentAlignment ="Right" VerticalContentAlignment="Center"/>
-            <Button Background="{x:Null}" BorderBrush="{x:Null}" Click="MemuItem_ZoomOut_Click">
+            <!--拡大縮小のバーを表示-->
+            <Label Name = "ZoomLabel" Content = "100%" Width = "40" HorizontalContentAlignment = "Right" VerticalContentAlignment = "Center"/>
+            <Button Background = "{x:Null}" BorderBrush = "{x:Null}" Click = "MemuItem_ZoomOut_Click">
                 <Image Source = "Images/ZoomOut_16x.png"/>
             </Button>
-            <Slider x:Name="Slider_Zoom" VerticalAlignment="Center" Width="160" IsSnapToTickEnabled="True" Minimum="25" Maximum="400" Ticks="25, 50, 75, 100, 125, 150, 200, 300, 400" Value = "100"
-                    VerticalContentAlignment="Center" ValueChanged = "Slider_Zoom_ValueChaged"/>
-            <Button Background="{x:Null}" BorderBrush="{x:Null}" Click = "MenuItem_ZoonIn_Click">
+            <Slider x:Name = "Slider_Zoom" VerticalAlignment = "Center" Width = "160" IsSnapToTickEnabled = "True" Minimum = "25" Maximum = "400" 
+                    Ticks = "25, 50, 75, 100, 125, 150, 200, 300, 400" Value = "100"
+                    VerticalContentAlignment = "Center" ValueChanged = "Slider_Zoom_ValueChaged"/>
+            <Button Background = "{x:Null}" BorderBrush = "{x:Null}" Click = "MenuItem_ZoonIn_Click">
                 <Image Source = "Images/ZoomIn_16x.png"/>
             </Button>
         </StackPanel>
@@ -109,7 +111,6 @@
                 <ColumnDefinition Width = "300"/>
             </Grid.ColumnDefinitions>
 
-
             <ScrollViewer Grid.Column = "0" Name = "scrollViewer" VerticalScrollBarVisibility = "Auto" HorizontalScrollBarVisibility = "Auto" Background = "#FF818181" Foreground="{x:Null}">
 
                 <!--キャンパスの設定-->
@@ -120,17 +121,22 @@
                 </Canvas>
             </ScrollViewer>
                             
-            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background ="#00000000"/>
+            <GridSplitter Grid.Column = "1" Width = "4" HorizontalAlignment = "Center" VerticalAlignment = "Stretch" Background ="#00000000"/>
             <!-- カラーパレットウィンドウ -->
-            <Grid Grid.Column="2" Background="#FFD4D4D4">
+            <Grid Grid.Column = "2" Background = "#FFD4D4D4">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height = "Auto"/>
+                    <RowDefinition Height = "Auto"/>
                     </Grid.RowDefinitions>
                 <!-- カラーパレット -->
-                <Label Grid.Row="0" Content = "ドーブル" Margin="10"/>
-                <Rectangle Grid.Row="1" x:Name="ColorPalette" Height = "60" Margin="10,0,10,10" Fill = "Black" MouseDown="ColorPalette_MouseDown"/>
+                <Label Grid.Row = "0" Content = "カラーパレット" Margin = "10"/>
+                <Rectangle Grid.Row = "1" x:Name = "ColorPalette" Height = "60" Margin = "10, 0, 10, 10" Fill = "Black" MouseDown = "ColorPalette_MouseDown"/>
             </Grid>
         </Grid>
+       
+        <!-- ステータスバーを表示 -->
+        <StatusBar Grid.Row = "3">
+            <Label Name = "StatusBarLabel" Content = ""/>
+        </StatusBar>
     </Grid>
 </Window>

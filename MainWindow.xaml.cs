@@ -81,9 +81,28 @@ namespace IconEditor
         {
             Rectangle rect = (Rectangle)sender;
 
+            // Canvasの座標を求める
+            // マウスの座標を求める
+            String statusText;
+            double x = Canvas.GetLeft(rect) / _canvasSize;
+            double y = Canvas.GetTop(rect) / _canvasSize;
+
+            //　マウスの座標をステータスバーに表示
+            statusText = "X" + x.ToString() + " " + "Y" + y.ToString();
+
+            // 塗った色を表示する
+            String colorText;
+            SolidColorBrush fillBrush = (SolidColorBrush)rect.Fill;
+            Color color = fillBrush.Color;
+            colorText = "RGB" + " " + color.R.ToString() + "," + color.G.ToString() + "," + color.B.ToString();
+
+            // 文字列を連結させる
+            StatusBarLabel.Content = statusText + " " + colorText;
+
             // 左ボタンを押し続ける
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                // 塗りつぶし
                 SolidColorBrush paletteBrush = (SolidColorBrush)ColorPalette.Fill;
                 rect.Fill = new SolidColorBrush(paletteBrush.Color);
             }
@@ -99,8 +118,8 @@ namespace IconEditor
         // バージョン情報の表示
         private void MenuItem_Ver_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Deai`s Special IconEditor\n Version 0.0.1\n\n" , "Deai`s Special IconEditorのバージョン情報", 
-                MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.Yes);
+            // メッセージボックスで表示する
+            MessageBox.Show("Deai`s Special IconEditor\n Version 0.0.1\n\n", "Deai`s Special IconEditorのバージョン情報", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.Yes);
         }
 
         private void MenuItem_File_Click(object sender, RoutedEventArgs e)
@@ -128,7 +147,7 @@ namespace IconEditor
 
             // 最小値を超えないようにする
             if (index < 0) return;
-            
+
             Slider_Zoom.Value = Slider_Zoom.Ticks[index];
         }
 
@@ -153,19 +172,20 @@ namespace IconEditor
         // 色を選択する
         private void ColorPalette_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            // 「色の設定」のダイアログボックスを表示する
+            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
+            colorDialog.FullOpen = true;
 
-            cd.FullOpen = true;
-
+            // 塗りつぶしをする色を設定
             SolidColorBrush paletteColorBrush = (SolidColorBrush)ColorPalette.Fill;
-            cd.Color = System.Drawing.Color.FromArgb(paletteColorBrush.Color.A, paletteColorBrush.Color.R, paletteColorBrush.Color.G, paletteColorBrush.Color.B);
+            colorDialog.Color = System.Drawing.Color.FromArgb(paletteColorBrush.Color.A, paletteColorBrush.Color.R, paletteColorBrush.Color.G, paletteColorBrush.Color.B);
 
-            if(cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if(colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Color color = Color.FromArgb(cd.Color.A, cd.Color.R, cd.Color.G, cd.Color.B);
+                // 塗りつぶしを行う
+                Color color = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
                 ColorPalette.Fill = new SolidColorBrush(color);
             }
-
         }
     }
 }
