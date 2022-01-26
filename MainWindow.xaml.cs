@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace IconEditor
 {
@@ -21,18 +23,24 @@ namespace IconEditor
     public partial class MainWindow : Window
     {
         // ラインの数
-        private uint _line = 42;
+        private const int _line = 42;
         // ボックスの大きさ
         private double _canvasSize = 20;
-
+        // ウィンドウの大きさ
         private double _windowSize = 840;
-        
+
+        Rectangle[,] Rectangles = new Rectangle[42, 42];
+        Stack<Color[,]> UndoStack = new Stack<Color[,]>();
+        Stack<Color[,]> RedoStack = new Stack<Color[,]>();
+
+        public static RoutedCommand UndoCommand { get; } = new RoutedCommand(nameof(UndoCommand), typeof(MainWindow));
+        public static RoutedCommand RedoCommand { get; } = new RoutedCommand(nameof(RedoCommand), typeof(MainWindow));
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-       
         /// <summary>
         ///  アイコンエディタ
         /// </summary>
@@ -63,13 +71,27 @@ namespace IconEditor
                     Canvas.SetLeft(rect, x * _canvasSize);
                     Canvas.SetTop(rect, y * _canvasSize);
                     canvas.Children.Add(rect);
+
+                    Rectangles[y, x] = rect;
                 }
             }
         }
 
         // マウスのクリックをした位置を塗りつぶす
         private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
-        {
+        {            
+            Color[,] color = new Color[_line, _line];
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+                    color[y, x] = Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B);
+                }
+            }
+            RedoStack.Clear();
+            UndoStack.Push(color);            
+
             Rectangle rect = (Rectangle)sender;
 
             SolidColorBrush paletteBrush = (SolidColorBrush)ColorPalette.Fill;
@@ -187,5 +209,239 @@ namespace IconEditor
                 ColorPalette.Fill = new SolidColorBrush(color);
             }
         }
+
+
+        // 元に戻す（メニューバー） 
+        private void MenuItem_Undo_Click(object sender, RoutedEventArgs e)
+        {
+            if (UndoStack.Count == 0) return;
+
+            Color[,] color = new Color[_line, _line];
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+                    color[y, x] = Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B);
+                }
+            }
+            RedoStack.Push(color);
+
+            color = UndoStack.Pop();
+
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    Rectangles[y, x].Fill = new SolidColorBrush(color[y, x]);
+                }
+            }
+        }
+
+        // 元に戻す（ツールバー）
+        private void ToolBar_Undo_Click(object sender, RoutedEventArgs e)
+        {
+            if (UndoStack.Count == 0) return;
+
+            Color[,] color = new Color[_line, _line];
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+                    color[y, x] = Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B);
+                }
+            }
+            RedoStack.Push(color);
+
+            color = UndoStack.Pop();
+         
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    Rectangles[y, x].Fill = new SolidColorBrush(color[y, x]);
+                }
+            }            
+        }
+
+        // やり直し（メニューバー）
+        private void MenuItem_Redo_Click(object sender, RoutedEventArgs e)
+        {
+            if (RedoStack.Count == 0) return;
+
+            Color[,] color = new Color[_line, _line];
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+                    color[y, x] = Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B);
+                }
+            }
+            UndoStack.Push(color);
+
+            color = RedoStack.Pop();
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    Rectangles[y, x].Fill = new SolidColorBrush(color[y, x]);
+                }
+            }
+        }
+
+        // やり直し（ツールバー）
+        private void ToolBar_Redo_Click(object sender, RoutedEventArgs e)
+        {
+            if (RedoStack.Count == 0) return;
+
+            Color[,] color = new Color[_line, _line];
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+                    color[y, x] = Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B);
+                }
+            }
+            UndoStack.Push(color);
+
+            color = RedoStack.Pop();
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    Rectangles[y, x].Fill = new SolidColorBrush(color[y, x]);
+                }
+            }
+        }
+
+        // 名前を付けて保存
+        private void MenuItem_SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            // ダイアログを開く
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "PNG(*.png) | *.png";
+            bool? result = dlg.ShowDialog();
+
+            // 保存をキャンセル
+            if (result != true) return;
+
+
+            // ピクセルの色を保存
+            WriteableBitmap bitmap = new WriteableBitmap(_line, _line, 300, 300, PixelFormats.Bgra32, null);
+            byte[] pixels = new byte[_line * _line * 4];
+
+            for(int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+
+                    pixels[(y * _line + x) * 4 + 0] = brush.Color.B;
+                    pixels[(y * _line + x) * 4 + 1] = brush.Color.G;
+                    pixels[(y * _line + x) * 4 + 2] = brush.Color.R;
+                    pixels[(y * _line + x) * 4 + 3] = brush.Color.A;
+                }
+            }
+
+            bitmap.WritePixels(new Int32Rect(0, 0, _line, _line), pixels, _line * 4, 0);
+
+            // 出力
+            using (FileStream stream = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write))
+            {
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                encoder.Save(stream);
+            }
+        }
+
+        // ファイルを開く
+        private void MenuItem_Open_Click(object sender, RoutedEventArgs e)
+        {
+            // ダイアログを開く
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "PNG(*.png) | *.png";
+            bool? result = dlg.ShowDialog();
+
+            // 保存をキャンセル
+            if (result != true) return;
+
+            byte[] pixels = new byte[_line * _line * 4];
+
+            //
+            using (FileStream stream = new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read))
+            {
+                PngBitmapDecoder decoder = new PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                BitmapSource bitmap = decoder.Frames[0];
+                bitmap.CopyPixels(pixels, _line * 4, 0);
+            }
+
+            for(int y = 0; y < _line; y++)
+            {
+                for(int x = 0;x < _line; x++)
+                {
+                    Color color = new Color();
+                    color.B = pixels[(y * _line + x) * 4 + 0];
+                    color.G = pixels[(y * _line + x) * 4 + 1];
+                    color.R = pixels[(y * _line + x) * 4 + 2];
+                    color.A = pixels[(y * _line + x) * 4 + 3];
+
+                    Rectangles[y, x].Fill = new SolidColorBrush(color);
+                }
+            }
+        }
+        private void MenuItem_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] pixels = new byte[_line * _line * 4];
+
+            for (int y = 0; y < _line; y++)
+            {
+                for (int x = 0; x < _line; x++)
+                {
+                    SolidColorBrush brush = (SolidColorBrush)Rectangles[y, x].Fill;
+
+                    pixels[(y * _line + x) * 4 + 0] = brush.Color.B;
+                    pixels[(y * _line + x) * 4 + 1] = brush.Color.G;
+                    pixels[(y * _line + x) * 4 + 2] = brush.Color.R;
+                    pixels[(y * _line + x) * 4 + 3] = brush.Color.A;
+                }
+            }
+
+            WriteableBitmap bitmap = new WriteableBitmap(_line, _line, 300, 300, PixelFormats.Bgra32, null);
+            bitmap.WritePixels(new Int32Rect(0, 0, _line, _line), pixels, _line * 4, 0, 0);
+
+            Clipboard.SetImage(bitmap);
+        }
+
+        private void MenuItem_Paste_Click(object sender, RoutedEventArgs e)
+        {
+            BitmapSource bitmap = Clipboard.GetImage();
+
+            if (bitmap == null) return;
+
+            byte[] pixels = new byte[bitmap.PixelWidth * bitmap.PixelHeight * 4];
+            bitmap.CopyPixels(pixels, _line * 4, 0);
+
+            int w = Math.Min(_line, bitmap.PixelWidth);
+            int h = Math.Min(_line, bitmap.PixelHeight);
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    Color color = new Color();
+                    color.B = pixels[(y * bitmap.PixelWidth + x) * 4 + 0];
+                    color.G = pixels[(y * bitmap.PixelWidth + x) * 4 + 1];
+                    color.R = pixels[(y * bitmap.PixelWidth + x) * 4 + 2];
+                    color.A = 255;
+
+                    Rectangles[y, x].Fill = new SolidColorBrush(color);
+                }
+            }
+        }
+
+ 
     }
 }

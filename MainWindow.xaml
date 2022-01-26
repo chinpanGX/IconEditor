@@ -8,6 +8,18 @@
         Title = "Deai`s Special IconEditor" Height = "800" Width = "1600" WindowStartupLocation = "CenterScreen" WindowState="Maximized"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle = "True">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWindow.UndoCommand}" Executed="MenuItem_Undo_Click"/>
+        <CommandBinding Command="{x:Static local:MainWindow.RedoCommand}" Executed="MenuItem_Redo_Click"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+Z" Command="{x:Static local:MainWindow.UndoCommand}"/>
+        <KeyBinding Gesture="Ctrl+R" Command="{x:Static local:MainWindow.RedoCommand}"/>
+    </Window.InputBindings>
+
+
     <Grid Background = "#FF4F3131">
         <Grid.RowDefinitions>
             <RowDefinition Height = "Auto"/>
@@ -26,7 +38,7 @@
                         <Image Source = "Images/NewFile_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name = "MenuItem_Open" Header = "開く(_O)..." InputGestureText = "Ctrl+O">　
+                <MenuItem x:Name = "MenuItem_Open" Header = "開く(_O)..." InputGestureText = "Ctrl+O" Click="MenuItem_Open_Click">　
                     <MenuItem.Icon>
                         <Image Source = "Images/OpenFile_16x.png"/>
                     </MenuItem.Icon>
@@ -36,7 +48,7 @@
                         <Image Source = "Images/Save_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name = "MenuItem_SaveAs" Header = "名前を付けて保存(_A)..." InputGestureText = "Ctrl+Shift+N">
+                <MenuItem x:Name = "MenuItem_SaveAs" Header = "名前を付けて保存(_A)..." InputGestureText = "Ctrl+Shift+N" Click="MenuItem_SaveAs_Click">
                     <MenuItem.Icon>
                         <Image Source = "Images/SaveAs_16x.png"/>
                     </MenuItem.Icon>
@@ -51,16 +63,31 @@
 
             <!--編集メニュー-->
             <MenuItem Header = "編集(_E)">
-                <MenuItem x:Name = "MenuItem_Undo" Header = "元に戻す(_U)" InputGestureText = "Ctrl+U">
+                <MenuItem x:Name = "MenuItem_Undo" Header = "元に戻す(_U)" InputGestureText = "Ctrl+Z" Click="MenuItem_Undo_Click">
                     <MenuItem.Icon>
-                        <Image Source="Images/Undo_16x.png"/>
+                        <Image Source = "Images/Undo_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name = "MenuItem_Redo" Header = "やり直し(_R)" InputGestureText = "Ctrl+R">
+                <MenuItem x:Name = "MenuItem_Redo" Header = "やり直し(_R)" InputGestureText = "Ctrl+R" Click="MenuItem_Redo_Click">
                     <MenuItem.Icon>
                         <Image Source="Images/Redo_16x.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator/>
+                
+                <MenuItem x:Name = "MenuItem_Copy" Header = "コピー(_C)" InputGestureText = "Ctrl+C" Click="MenuItem_Copy_Click">
+                    <MenuItem.Icon>
+                         <Image Source="Images/Redo_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name = "MenuItem_Paste" Header = "ペースト(_V)" InputGestureText = "Ctrl+V" Click="MenuItem_Paste_Click">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Redo_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+
             </MenuItem>
 
             <!--ヘルプメニュー-->
@@ -84,10 +111,10 @@
             <Button x:Name = "ToolBar_Save" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
                 <Image Source = "Images/Save_16x.png"/>
             </Button>
-            <Button x:Name = "ToolBar_Undo" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
+            <Button x:Name = "ToolBar_Undo" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}" Click="ToolBar_Undo_Click">
                 <Image Source="Images/Undo_16x.png"/>
             </Button>
-            <Button x:Name = "ToolBar_Redo" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}">
+            <Button x:Name = "ToolBar_Redo" Padding = "10" BorderBrush = "{x:Null}" Background = "{x:Null}" VerticalAlignment="Top" Click="ToolBar_Redo_Click">
                 <Image Source = "Images/Redo_16x.png"/>
             </Button>
 
